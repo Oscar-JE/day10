@@ -13,35 +13,44 @@ type CommandItr interface {
 }
 
 type Input struct {
-	command string
-	value   int
+	ExecutionTime int
+	Value         int
 }
 
 func (i Input) Eq(other Input) bool {
-	return i.command == other.command && i.value == other.value
+	return i.ExecutionTime == other.ExecutionTime && i.Value == other.Value
 }
 
 type InputIter struct {
-	scanner *bufio.Scanner
+	scanner     *bufio.Scanner
+	haveScanned bool
 }
 
 func InitInputIter(filename string) InputIter {
 	fileReader, _ := os.Open(filename)
 	file_scanner := bufio.NewScanner(fileReader)
-	return InputIter{file_scanner}
+	return InputIter{scanner: file_scanner, haveScanned: false}
 }
 
-func (i InputIter) HasNext() bool {
-	return i.scanner.Scan()
+func (i *InputIter) HasNext() bool { // det här blev bara dumt
+	if i.haveScanned {
+		return true
+	} else {
+		i.haveScanned = i.scanner.Scan()
+		return i.haveScanned
+	}
+
+	//return i.scanner.Scan()
 }
 
-func (i InputIter) GetNext() Input {
+func (i *InputIter) GetNext() Input {
 	raw := i.scanner.Text()
+	i.haveScanned = false
 	if strings.Contains(raw, " ") {
 		splited := strings.Split(raw, " ")
-		command := splited[0]
 		value, _ := strconv.Atoi(splited[1])
-		return Input{command: command, value: value}
+		instructionTime := 2
+		return Input{ExecutionTime: instructionTime, Value: value}
 	}
-	return Input{command: raw, value: 0}
+	return Input{ExecutionTime: 1, Value: 0}
 }

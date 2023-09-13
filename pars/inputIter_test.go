@@ -11,7 +11,7 @@ func TestInputPars(t *testing.T) {
 		t.Errorf("Can't find first input")
 	}
 	i1 := in.GetNext()
-	exp1 := Input{command: "noop", value: 0}
+	exp1 := Input{ExecutionTime: 1, Value: 0}
 	if i1 != exp1 {
 		t.Errorf("Wrong first input")
 	}
@@ -20,7 +20,7 @@ func TestInputPars(t *testing.T) {
 		t.Errorf("Can't find second input")
 	}
 	i2 := in.GetNext()
-	exp2 := Input{command: "addx", value: 3}
+	exp2 := Input{ExecutionTime: 2, Value: 3}
 	if i2 != exp2 {
 		t.Errorf("Wrong Second input")
 	}
@@ -29,7 +29,7 @@ func TestInputPars(t *testing.T) {
 		t.Errorf("Can't find third input")
 	}
 	i3 := in.GetNext()
-	exp3 := Input{command: "addx", value: -5}
+	exp3 := Input{ExecutionTime: 2, Value: -5}
 	if i3 != exp3 {
 		t.Errorf("Wrong Third input")
 	}
@@ -37,4 +37,19 @@ func TestInputPars(t *testing.T) {
 	if b4 {
 		t.Errorf("Found impossible input")
 	}
+}
+
+func TestMultipleHasNext(t *testing.T) {
+	// hasnext should not change the state
+	in := InitInputIter("../input_short.txt")
+	i := 0
+	hasNext := true
+	for i < 20 {
+		hasNext = hasNext && in.HasNext()
+		i++
+	}
+	if !hasNext {
+		t.Errorf("HasNext is changing the state of the scanner")
+	}
+
 }
