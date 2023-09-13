@@ -51,5 +51,11 @@ func TestMultipleHasNext(t *testing.T) {
 	if !hasNext {
 		t.Errorf("HasNext is changing the state of the scanner")
 	}
+}
 
+func TestShort(t *testing.T) {
+	in := InitInputIter("../input_short.txt")
+	for in.HasNext() {
+		println(in.GetNext().String())
+	}
 }
