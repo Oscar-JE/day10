@@ -2,17 +2,9 @@ package cpu
 
 import (
 	"day10/pars"
+	"fmt"
 	"testing"
 )
-
-/*
-func TestShortest(t *testing.T) {
-	input := pars.InitInputIter("../input_short.txt")
-	cpu := InitClock(input)
-	for cpu.HasNext() {
-		println(cpu.GetNextCycle())
-	}
-}*/
 
 func TestArray(t *testing.T) {
 	inputs := []pars.Input{{ExecutionTime: 1, Value: 0},
@@ -26,4 +18,15 @@ func TestArray(t *testing.T) {
 	if lastValue != -1 {
 		t.Errorf("Wrong value at end of short program , is %d , should be %d", lastValue, -1)
 	}
+}
+
+func TestMediumInput(t *testing.T) {
+	inputIter := pars.InitInputIter("../input_medium.txt")
+	cpu := InitClock(inputIter)
+	cykleCount := 1
+	for cykleCount <= 220 {
+		fmt.Printf("cycle: %d \t value: %d \n", cykleCount, cpu.GetNextCycle())
+		cykleCount++
+	}
+
 }
