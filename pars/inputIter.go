@@ -27,26 +27,34 @@ func (i Input) String() string {
 }
 
 type InputIter struct {
-	scanner     *bufio.Scanner
-	haveScanned bool
+	inputs []Input
+	index  int
 }
 
 func InitInputIter(filename string) InputIter {
 	fileReader, _ := os.Open(filename)
 	file_scanner := bufio.NewScanner(fileReader)
-	return InputIter{scanner: file_scanner, haveScanned: true}
+	inputs := []Input{}
+	for file_scanner.Scan() {
+		line := file_scanner.Text()
+		inputs = append(inputs, pars(line))
+	}
+	return InputIter{inputs: inputs, index: 0}
 }
 
-func (i *InputIter) HasNext() bool { // det här blev bara dumt
-
-	return i.haveScanned
+func (i InputIter) HasNext() bool {
+	return i.index < len(i.inputs)
 }
 
 func (i *InputIter) GetNext() Input {
-	i.haveScanned = i.scanner.Scan()
-	raw := i.scanner.Text()
-	if strings.Contains(raw, " ") {
-		splited := strings.Split(raw, " ")
+	retVal := i.inputs[i.index]
+	i.index++
+	return retVal
+}
+
+func pars(line string) Input {
+	if strings.Contains(line, " ") {
+		splited := strings.Split(line, " ")
 		value, _ := strconv.Atoi(splited[1])
 		instructionTime := 2
 		return Input{ExecutionTime: instructionTime, Value: value}

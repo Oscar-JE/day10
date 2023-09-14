@@ -33,7 +33,7 @@ func (c ClockIterator) HasNext() bool {
 	return haveInput || computesInput
 }
 
-func (c *ClockIterator) GetNext() int {
+func (c *ClockIterator) getNext() int {
 	c.registerValue += c.delayedAdd.valueToAdd //skicka runt operatorer med delay istället ??
 
 	if c.inputIter.HasNext() {
@@ -47,7 +47,7 @@ func (c *ClockIterator) GetNextCycle() int {
 	currentValue := c.registerValue
 
 	if c.delayedAdd.delay < 1 {
-		currentValue = c.GetNext()
+		currentValue = c.getNext()
 	}
 	c.delayedAdd.delay -= 1
 	return currentValue
